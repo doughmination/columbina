@@ -158,6 +158,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "colorful" },
     { name = "discord-py" },
+    { name = "jpml" },
     { name = "python-dotenvx" },
     { name = "ruff" },
     { name = "toml" },
@@ -168,6 +169,7 @@ dependencies = [
 requires-dist = [
     { name = "colorful", specifier = ">=0.5.8" },
     { name = "discord-py", specifier = ">=2.7.1" },
+    { name = "jpml", specifier = ">=1.1.1" },
     { name = "python-dotenvx", specifier = ">=2.0.0" },
     { name = "ruff", specifier = ">=0.16.7" },
     { name = "toml", specifier = ">=0.10.2" },
@@ -235,6 +237,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/5f/f7/abb373e5757eaec4b922b92f97ec8d6d7e057cf06778247604fbc4e7c3f3/idna-3.19.tar.gz", hash = "sha256:5e0811a4383b21dc5838069f801c4fb62113b7447663d2530d2bd6e77b49bf15", size = 215237, upload-time = "2026-08-18T05:14:24.27Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/57/b0/0e52c878c53f245edd3a11020f20979b3f490f245af532c7cae3027754b5/idna-3.19-py3-none-any.whl", hash = "sha256:815e7be7a7806d54abb586dc943addc79e8b2ee16915059658cbeff4b1b43bf4", size = 68550, upload-time = "2026-08-18T05:14:22.343Z" },
+]
+
+[[package]]
+name = "jpml"
+version = "1.1.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/ab/79/f7a2536c3d13e257bf3911ecc926f03106683e9845820ec38cb792fe3291/jpml-1.1.1.tar.gz", hash = "sha256:f17098324d869f73fa6730a36842fe47e5b00fa581cec887f8672e090310af0d", size = 21513, upload-time = "2026-09-12T00:37:31.812Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/56/6e/cd214a671f0f4f677ff74729d9c73b619f9f7300318bd2be1fb74bc8f408/jpml-1.1.1-py3-none-any.whl", hash = "sha256:59a8bf81c81100fa10486df673b5d313a500af2b365b5f7ad801506b3d7387ea", size = 25942, upload-time = "2026-09-12T00:37:30.642Z" },
 ]
 
 [[package]]

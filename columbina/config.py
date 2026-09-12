@@ -53,7 +53,7 @@ def resolveDir(raw: str | None, fallback: Path) -> Path:
 
 
 databaseDir = resolveDir(os.getenv("DATABASE_DIR"), repoRoot / "data")
-databasePath = databaseDir / "columbina.db"
+databasePath = databaseDir / "columbina.jp"
 
 prefixNames: list[str] = sorted(("damselette", "columbina", "bina"), key=len, reverse=True)
 
