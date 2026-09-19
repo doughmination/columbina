@@ -421,7 +421,6 @@ async def runBot() -> None:
 
         print(cf.grey("[shutdown] bot closed"))
 
-
 def main() -> None:
     if config.TOKEN is None:
         raise SystemExit("The Bot Token is not set, please configure .env")

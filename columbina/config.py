@@ -38,7 +38,8 @@ def readId(raw: str | None) -> int | None:
 # — a global sync can take up to an hour to appear. Left unset, she falls back
 # to the only server she's in.
 guildId = readId(os.getenv("GUILD_ID"))
-
+joinRoleID = readId(os.getenv("JOIN_ROLE_ID"))
+botRoleID = readId(os.getenv("BOT_JOIN_ROLE_ID"))
 
 def resolveDir(raw: str | None, fallback: Path) -> Path:
     """A configured directory, read relative to the repo rather than the cwd.
