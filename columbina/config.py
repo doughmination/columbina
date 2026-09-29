@@ -56,6 +56,26 @@ def resolveDir(raw: str | None, fallback: Path) -> Path:
 databaseDir = resolveDir(os.getenv("DATABASE_DIR"), repoRoot / "data")
 databasePath = databaseDir / "columbina.jp"
 
+# How her name is drawn in member lists and chat. Bots can't style their global
+# profile, only their member in each server (PATCH /guilds/{id}/members/@me —
+# see https://docs.discord.food/resources/user#display-name-style-object).
+#
+# Fonts: 11 gg Sans (default), 3 Sakura, 4 Jellybean, 6 Modern, 7 Medieval,
+#        8 8Bit, 10 Vampyre, 12 Tempo, 13 Monkey Bars, 14 Mainframe,
+#        15 Headbang, 16 Journal
+# Effects: 1 Solid, 2 Gradient, 3 Neon, 4 Toon, 5 Pop, 6 Glow, 7 Prism, 8 Gummy
+# Colors: as 0xRRGGBB; Solid/Neon/Toon/Pop take 1, the rest up to 5.
+# Set an entry to None to leave it alone.
+displayNameFont: int | None = 16  # Journal
+displayNameEffect: int | None = 7  # Prism
+displayNameColors: list[int] | None = [
+    0x5BCEFA,
+    0xF5A9B8,
+    0xFFFFFF,
+    0xF5A9B8,
+    0x5BCEFA,
+]
+
 prefixNames: list[str] = sorted(("damselette", "columbina", "bina"), key=len, reverse=True)
 
 owners: list[int] = [

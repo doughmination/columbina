@@ -333,6 +333,33 @@ class Bot(commands.Bot):
         print(cf.green(f"[sync] {len(synced)} slash command(s) live in {target}"))
         return len(synced)
 
+    async def applyNameStyle(self) -> None:
+        """Set her display name font/effect/colours in every server she's in.
+
+        discord.py has no wrapper for these fields yet, so they go straight
+        through the raw member-edit route. It's per-guild because bots can't
+        style their global profile.
+        """
+        fields = {
+            key: value
+            for key, value in (
+                ("display_name_font_id", config.displayNameFont),
+                ("display_name_effect_id", config.displayNameEffect),
+                ("display_name_colors", config.displayNameColors),
+            )
+            if value is not None
+        }
+        if not fields:
+            return
+
+        for guild in self.guilds:
+            try:
+                await self.http.edit_my_member(guild.id, **fields)
+            except discord.HTTPException as e:
+                print(cf.red(f"[style] couldn't style my name in {guild.id}: {e}"))
+            else:
+                print(cf.yellow(f"[style] name style set in {guild.name}"))
+
     async def on_ready(self) -> None:
         # Guarded: on_ready fires again on every reconnect, and syncing is
         # rate-limited.
@@ -354,6 +381,7 @@ class Bot(commands.Bot):
                 print(cf.yellow("Avatar and Banner loaded!"))
             except (discord.HTTPException, OSError) as e:
                 print(cf.red(f"Failed to set avatar/banner: {e}"))
+            await self.applyNameStyle()
         print(cf.magenta(f"Logged in as {self.user}"))
 
 
