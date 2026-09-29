@@ -354,11 +354,23 @@ class Bot(commands.Bot):
 
         for guild in self.guilds:
             try:
-                await self.http.edit_my_member(guild.id, **fields)
+                member = await self.http.edit_my_member(guild.id, **fields)
             except discord.HTTPException as e:
                 print(cf.red(f"[style] couldn't style my name in {guild.id}: {e}"))
+                continue
+
+            # A 200 isn't proof: Discord drops fields it won't accept without
+            # erroring, so report what it actually stored.
+            stored = member.get("display_name_styles")
+            if stored:
+                print(cf.yellow(f"[style] {guild.name} stored {stored}"))
             else:
-                print(cf.yellow(f"[style] name style set in {guild.name}"))
+                print(
+                    cf.red(
+                        f"[style] {guild.name} accepted the request but stored no"
+                        f" style — Discord ignored {sorted(fields)}"
+                    )
+                )
 
     async def on_ready(self) -> None:
         # Guarded: on_ready fires again on every reconnect, and syncing is
