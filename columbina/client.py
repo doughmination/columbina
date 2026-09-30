@@ -11,6 +11,7 @@ import sys
 import traceback
 from pathlib import Path
 
+import aiohttp
 import discord
 from discord import app_commands
 from discord.ext import commands
@@ -18,6 +19,8 @@ from discord.ext import commands
 from columbina import config, moderation
 from columbina.config import cf
 from columbina.database import Database
+
+API = "https://discord.com/api/v10"
 
 # --------------------------------------------------------------------------
 # Prefixes
@@ -334,11 +337,12 @@ class Bot(commands.Bot):
         return len(synced)
 
     async def applyNameStyle(self) -> None:
-        """Set her display name font/effect/colours in every server she's in.
+        """Set her display name font/effect/colours, by hand.
 
-        discord.py has no wrapper for these fields yet, so they go straight
-        through the raw member-edit route. It's per-guild because bots can't
-        style their global profile.
+        discord.py has no wrapper for these fields, so this sends the PATCH
+        itself with her bot token, to her global profile and to her member in
+        every server. Discord drops fields it won't accept without erroring,
+        so each result logs what was actually stored rather than the status.
         """
         fields = {
             key: value
@@ -352,25 +356,32 @@ class Bot(commands.Bot):
         if not fields:
             return
 
-        for guild in self.guilds:
-            try:
-                member = await self.http.edit_my_member(guild.id, **fields)
-            except discord.HTTPException as e:
-                print(cf.red(f"[style] couldn't style my name in {guild.id}: {e}"))
-                continue
+        targets = [("profile", "/users/@me")] + [
+            (guild.name, f"/guilds/{guild.id}/members/@me") for guild in self.guilds
+        ]
+        headers = {
+            "Authorization": f"Bot {config.requireToken()}",
+            "Content-Type": "application/json",
+        }
 
-            # A 200 isn't proof: Discord drops fields it won't accept without
-            # erroring, so report what it actually stored.
-            stored = member.get("display_name_styles")
-            if stored:
-                print(cf.yellow(f"[style] {guild.name} stored {stored}"))
-            else:
-                print(
-                    cf.red(
-                        f"[style] {guild.name} accepted the request but stored no"
-                        f" style — Discord ignored {sorted(fields)}"
-                    )
-                )
+        async with aiohttp.ClientSession(headers=headers) as session:
+            for name, route in targets:
+                try:
+                    async with session.patch(API + route, json=fields) as response:
+                        body = await response.json(content_type=None)
+                except (aiohttp.ClientError, ValueError) as e:
+                    print(cf.red(f"[style] {name}: request failed: {e}"))
+                    continue
+
+                if response.status >= 400:
+                    print(cf.red(f"[style] {name}: {response.status} {body}"))
+                    continue
+
+                stored = body.get("display_name_styles")
+                if stored:
+                    print(cf.yellow(f"[style] {name}: stored {stored}"))
+                else:
+                    print(cf.red(f"[style] {name}: {response.status} but stored no style"))
 
     async def on_ready(self) -> None:
         # Guarded: on_ready fires again on every reconnect, and syncing is

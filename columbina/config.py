@@ -56,8 +56,8 @@ def resolveDir(raw: str | None, fallback: Path) -> Path:
 databaseDir = resolveDir(os.getenv("DATABASE_DIR"), repoRoot / "data")
 databasePath = databaseDir / "columbina.jp"
 
-displayNameFont: int | None = 16
-displayNameEffect: int | None = 7
+displayNameFont: int | None = 16  # Journal
+displayNameEffect: int | None = 7  # Prism
 displayNameColors: list[int] | None = [
     0x5BCEFA,
     0xF5A9B8,
