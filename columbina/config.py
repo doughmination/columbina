@@ -40,6 +40,7 @@ def readId(raw: str | None) -> int | None:
 guildId = readId(os.getenv("GUILD_ID"))
 joinRoleID = readId(os.getenv("JOIN_ROLE_ID"))
 botRoleID = readId(os.getenv("BOT_JOIN_ROLE_ID"))
+welcomeChannelId = readId(os.getenv("WELCOME_CHANNEL_ID"))
 
 def resolveDir(raw: str | None, fallback: Path) -> Path:
     """A configured directory, read relative to the repo rather than the cwd.
