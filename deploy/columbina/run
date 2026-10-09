@@ -1,7 +1,7 @@
 #!/bin/sh
 # runit service for Columbina.
 # Adjust these to match where the bot lives on the server.
-SANDRONE_DIR=/srv/clove/columbina
+SANDRONE_DIR=/srv/bot/columbina
 SANDRONE_USER=clove
 
 exec 2>&1
